@@ -23,6 +23,7 @@ pub trait StringExtensions {
 impl StringExtensions for str {
     fn to_int_vector(&self) -> Vec<i32> {
         self.split(|c: char| !(c.is_digit(10)))
+            .filter(|s| !s.is_empty())
             .map(|s| s.parse().expect(&*format!("{} is not a number!",s)))
             .collect()
     }
