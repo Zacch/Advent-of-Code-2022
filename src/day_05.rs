@@ -53,6 +53,6 @@ pub fn day_05() {
     let part1 = String::from_iter(stacks.into_iter().map(|mut s|s.pop().unwrap()));
     println!("Part 1: {}", part1);
 
-    let mut part2 = String::from_iter(stacks2.into_iter().map(|mut s|s.pop().unwrap()));
+    let part2 = String::from_iter(stacks2.into_iter().map(|mut s|s.pop().unwrap()));
     println!("Part 2: {}", part2);
 }
