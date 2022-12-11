@@ -6,7 +6,7 @@ use advent_of_code_2022::*;
 
 fn main() {
     let now = Instant::now();
-
+/*
     day_01::run();
     day_02::run();
     day_03::run();
@@ -17,6 +17,8 @@ fn main() {
     day_08::run();
     day_09::run();
     day_10::run();
+*/
+    day_11::run();
 
     println!("Execution time: {:?}", Instant::now().checked_duration_since(now).unwrap());
 }
