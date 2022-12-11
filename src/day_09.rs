@@ -2,7 +2,8 @@ use std::fs;
 
 use crate::traits::StringExtensions;
 
-pub fn day_09() {
+pub fn run() {
+    println!("Day 9");
     let contents = fs::read_to_string("input/day_09.txt")
         .expect("Couldn't read the file");
     let lines:Vec<&str> = Vec::from_iter(contents.lines());

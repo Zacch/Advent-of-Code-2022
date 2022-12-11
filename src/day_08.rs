@@ -1,7 +1,8 @@
 use std::cmp::max;
 use std::fs;
 
-pub fn day_08() {
+pub fn run() {
+    println!("Day 8");
     let contents = fs::read_to_string("input/day_08.txt")
         .expect("Couldn't read the file");
     let lines:Vec<&str> = Vec::from_iter(contents.lines());
@@ -65,28 +66,23 @@ fn scenic_score(r: usize, c: usize, grid:&Vec<Vec<u32>>) -> i32 {
     let tree = row[c];
 
     let (mut left, mut top, mut right, mut bottom) = (0, 0, 0, 0);
-    println!();
     for i in (0..c).rev() {
         left += 1;
-     //   println!("{} ({} {}) = {}, left == {}", i, r, c, row[i], left);
         if row[i] >= tree { break; }
     }
 
     for i in (c + 1)..row.len() {
         right += 1;
-//        println!("{} ({} {}) = {}, right == {}", i, r, c, row[i], right);
         if row[i] >= tree { break; }
     }
 
     for i in (0..r).rev() {
         top += 1;
-       // println!("{} ({} {}) = {}, top == {}", i, r, c, grid[i][c], top);
         if grid[i][c] >= tree { break; }
     }
 
     for i in (r + 1)..grid.len() {
         bottom += 1;
-        // println!("{} ({} {}) = {}, bottom == {}", i, r, c, grid[i][c], bottom);
         if grid[i][c] >= tree { break; }
     }
 

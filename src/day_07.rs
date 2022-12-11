@@ -5,7 +5,8 @@ use substring::*;
 
 use crate::traits::StringExtensions;
 
-pub fn day_07() {
+pub fn run() {
+    println!("Day 7");
     let contents = fs::read_to_string("input/day_07.txt")
         .expect("Couldn't read the file");
 

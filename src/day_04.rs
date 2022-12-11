@@ -8,7 +8,8 @@ use crate::traits::StringExtensions;
     I wrote the traits afterwards, both to learn how to do it and to clean up the code.
  */
 
-pub fn day_04() {
+pub fn run() {
+    println!("Day 4");
     let (mut part1, mut part2) = (0, 0);
     let contents = fs::read_to_string("input/day_04.txt")
         .expect("Couldn't read the file");

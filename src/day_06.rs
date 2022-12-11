@@ -1,6 +1,7 @@
 use std::fs;
 
-pub fn day_06() {
+pub fn run() {
+    println!("Day 6");
     let contents = fs::read_to_string("input/day_06.txt")
         .expect("Couldn't read the file");
     let line:Vec<char> = contents.trim().chars().collect();

@@ -1,6 +1,7 @@
 use std::fs;
 
-pub fn day_01() {
+pub fn run() {
+    println!("Day 1");
     let contents = fs::read_to_string("input/day_01.txt")
         .expect("Couldn't read the file");
 
