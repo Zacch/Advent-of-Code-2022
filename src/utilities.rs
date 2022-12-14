@@ -9,7 +9,7 @@ impl Point {
     pub fn new(x: i32, y: i32) -> Point {
         Point { x, y }
     }
-    pub fn up(&self) -> Point { Self::new(self.x, self.y + 1) }
+    pub fn up(&self) -> Point { Point::new(self.x, self.y + 1) }
     pub fn down(&self) -> Point {
         Point::new(self.x, self.y - 1)
     }
@@ -19,6 +19,18 @@ impl Point {
     pub fn right(&self) -> Point {
         Point::new(self.x + 1, self.y)
     }
+
+    pub fn n(&self) -> Point { Point::new(self.x, self.y + 1) }
+    pub fn s(&self) -> Point { Point::new(self.x, self.y - 1) }
+    pub fn w(&self) -> Point { Point::new(self.x - 1, self.y) }
+    pub fn e(&self) -> Point {
+        Point::new(self.x + 1, self.y)
+    }
+
+    pub fn ne(&self) -> Point { Point::new(self.x + 1, self.y + 1) }
+    pub fn se(&self) -> Point { Point::new(self.x + 1, self.y - 1) }
+    pub fn sw(&self) -> Point { Point::new(self.x - 1, self.y - 1) }
+    pub fn nw(&self) -> Point { Point::new(self.x - 1, self.y + 1) }
 }
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]

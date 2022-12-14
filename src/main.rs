@@ -19,8 +19,9 @@ fn main() {
     day_10::run();
     day_11::run();
     day_12::run();
-*/
     day_13::run();
+*/
+    day_14::run();
 
     println!("Execution time: {:?}", Instant::now().checked_duration_since(now).unwrap());
 }
