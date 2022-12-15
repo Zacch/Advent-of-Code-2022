@@ -1,4 +1,5 @@
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -31,6 +32,10 @@ impl Point {
     pub fn se(&self) -> Point { Point::new(self.x + 1, self.y - 1) }
     pub fn sw(&self) -> Point { Point::new(self.x - 1, self.y - 1) }
     pub fn nw(&self) -> Point { Point::new(self.x - 1, self.y + 1) }
+
+    pub(crate) fn manhattan_distance(&self, p: &Point) -> i32 {
+        i32::abs(self.x - p.x) + i32::abs(self.y - p.y)
+    }
 }
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
@@ -44,5 +49,21 @@ pub struct Rect {
 impl Rect {
     pub fn contains(&self, p: Point) -> bool {
         p.x >= self.left && p.x < self.right && p.y >= self.bottom && p.y < self.top
+    }
+}
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+pub struct IntRange {
+    pub start: i32,
+    pub end: i32,
+}
+
+/// An inclusive range of i32s, i. e., `end` is included in the range
+impl IntRange {
+    pub fn new(start: i32, end: i32) -> IntRange {
+        IntRange { start, end }
+    }
+    pub fn touches(&self, other: &IntRange) -> bool {
+        self.start <= other.end + 1 && self.end >= other.start - 1
     }
 }
