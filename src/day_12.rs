@@ -1,7 +1,8 @@
 use std::collections::VecDeque;
 use std::fs;
 
-use crate::utilities::{Point, Rect};
+use crate::points::Point;
+use crate::utilities::Rect;
 
 pub fn run() {
     println!("Day 12");

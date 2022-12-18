@@ -15,7 +15,9 @@ pub mod day_14;
 pub mod day_15;
 
 pub mod day_17;
+pub mod day_18;
 
 
 pub mod utilities;
+pub mod points;
 pub mod traits;

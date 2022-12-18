@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::fs;
 
-use crate::utilities::Point;
+use crate::points::Point;
 
 pub fn run() {
     println!("Day 17");

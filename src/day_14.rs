@@ -1,7 +1,8 @@
 use std::fs;
 
+use crate::points::Point;
 use crate::traits::StringExtensions;
-use crate::utilities::{Point, Rect};
+use crate::utilities::Rect;
 
 pub fn run() {
     println!("Day 14");
