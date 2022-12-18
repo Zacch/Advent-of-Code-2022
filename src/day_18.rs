@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs;
 
-use crate::points::{CubeFace, Direction, Point3};
+use crate::points::{CubeFace, Point3};
 use crate::points::Direction::*;
 use crate::traits::StringExtensions;
 
@@ -26,7 +26,6 @@ pub fn run() {
     }
     println!("Part 1: {}", part1);
     println!("Part 2: {}", part2(&cubes));
-
 }
 
 fn part2(cubes: &HashMap<String, Point3>) -> usize {
@@ -36,32 +35,20 @@ fn part2(cubes: &HashMap<String, Point3>) -> usize {
     while !cubes.contains_key(&current_cube.to_string()) {
         current_cube = current_cube.back();
     }
-    let face = CubeFace::new(current_cube, Forward);
-
-    println!("{:?}", current_cube);
-    println!("{:?}", face);
-
-    let mut faces: Vec<CubeFace> = vec![face];
+    let start_face = CubeFace::new(current_cube, Forward);
 
     let mut frontier: VecDeque<CubeFace> = VecDeque::new();
-    frontier.push_back(face);
+    frontier.push_back(start_face);
     let mut visited: HashSet<CubeFace> = HashSet::new();
 
     while !frontier.is_empty() {
-     //   println!("-------------------------");
         let current = frontier.pop_front().unwrap();
-       // println!("current   {:?}", current);
-        let neighbors = neighbors_of(current);
+        if visited.contains(&current) { continue; }
+        let neighbors = neighbors_of(current, cubes);
         for next in neighbors {
             if visited.contains(&next) { continue; }
-            if !cubes.contains_key(&next.cube.to_string()) { continue; }
-            if cubes.contains_key(&next.cube.go(face.direction).to_string()) { continue; }
-
-       //     println!("Adding {:?}", next);
-            faces.push(next);
             frontier.push_back(next);
         }
-        println!("Inserting {:?}", current);
         visited.insert(current);
     }
 
@@ -69,105 +56,209 @@ fn part2(cubes: &HashMap<String, Point3>) -> usize {
 }
 
 //noinspection DuplicatedCode
-fn neighbors_of(face: CubeFace) -> Vec<CubeFace> {
+fn neighbors_of(face: CubeFace, cubes: &HashMap<String, Point3>) -> Vec<CubeFace> {
+    let cube = face.cube;
+    let mut neighbours: Vec<CubeFace> = vec![];
 
-    let facing_cube = face.cube.go(face.direction);
     match face.direction {
-        Up => {
-            vec![
-                CubeFace::new(facing_cube, Down),
-                CubeFace::new(face.cube, Left),
-                CubeFace::new(facing_cube, Left),
-                CubeFace::new(face.cube.left(), Up),
-                CubeFace::new(face.cube, Right),
-                CubeFace::new(facing_cube, Right),
-                CubeFace::new(face.cube.right(), Up),
-                CubeFace::new(face.cube, Forward),
-                CubeFace::new(facing_cube, Forward),
-                CubeFace::new(face.cube.forward(), Up),
-                CubeFace::new(face.cube, Back),
-                CubeFace::new(facing_cube, Back),
-                CubeFace::new(face.cube.back(), Up),
-        ]},
-        Down => {
-            vec![
-                CubeFace::new(facing_cube, Up),
-                CubeFace::new(face.cube, Left),
-                CubeFace::new(facing_cube, Left),
-                CubeFace::new(face.cube.left(), Down),
-                CubeFace::new(face.cube, Right),
-                CubeFace::new(facing_cube, Right),
-                CubeFace::new(face.cube.right(), Down),
-                CubeFace::new(face.cube, Forward),
-                CubeFace::new(facing_cube, Forward),
-                CubeFace::new(face.cube.forward(), Down),
-                CubeFace::new(face.cube, Back),
-                CubeFace::new(facing_cube, Back),
-                CubeFace::new(face.cube.back(), Down),
-            ]},
-        Left => {
-            vec![
-                CubeFace::new(facing_cube, Right),
-                CubeFace::new(face.cube, Up),
-                CubeFace::new(facing_cube, Up),
-                CubeFace::new(face.cube.up(), Left),
-                CubeFace::new(face.cube, Down),
-                CubeFace::new(facing_cube, Down),
-                CubeFace::new(face.cube.down(), Left),
-                CubeFace::new(face.cube, Forward),
-                CubeFace::new(facing_cube, Forward),
-                CubeFace::new(face.cube.forward(), Left),
-                CubeFace::new(face.cube, Back),
-                CubeFace::new(facing_cube, Back),
-                CubeFace::new(face.cube.back(), Left),
-            ]},
-        Right => {
-            vec![
-                CubeFace::new(facing_cube, Left),
-                CubeFace::new(face.cube, Up),
-                CubeFace::new(facing_cube, Up),
-                CubeFace::new(face.cube.up(), Right),
-                CubeFace::new(face.cube, Down),
-                CubeFace::new(facing_cube, Down),
-                CubeFace::new(face.cube.down(), Right),
-                CubeFace::new(face.cube, Forward),
-                CubeFace::new(facing_cube, Forward),
-                CubeFace::new(face.cube.forward(), Right),
-                CubeFace::new(face.cube, Back),
-                CubeFace::new(facing_cube, Back),
-                CubeFace::new(face.cube.back(), Right),
-            ]},
         Forward => {
-            vec![
-                CubeFace::new(facing_cube, Back),
-                CubeFace::new(face.cube, Left),
-                CubeFace::new(facing_cube, Left),
-                CubeFace::new(face.cube.left(), Forward),
-                CubeFace::new(face.cube, Right),
-                CubeFace::new(facing_cube, Right),
-                CubeFace::new(face.cube.right(), Forward),
-                CubeFace::new(face.cube, Up),
-                CubeFace::new(facing_cube, Up),
-                CubeFace::new(face.cube.up(), Forward),
-                CubeFace::new(face.cube, Down),
-                CubeFace::new(facing_cube, Down),
-                CubeFace::new(face.cube.down(), Forward),
-            ]},
+            if cubes.contains_key(&cube.right().forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.right().forward(), Left))
+            } else if cubes.contains_key(&cube.right().to_string()) {
+                neighbours.push(CubeFace::new(cube.right(), Forward))
+            } else {
+                neighbours.push(CubeFace::new(cube, Right))
+            }
+
+            if cubes.contains_key(&cube.left().forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.left().forward(), Right))
+            } else if cubes.contains_key(&cube.left().to_string()) {
+                neighbours.push(CubeFace::new(cube.left(), Forward))
+            } else {
+                neighbours.push(CubeFace::new(cube, Left))
+            }
+
+            if cubes.contains_key(&cube.up().forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.up().forward(), Down))
+            } else if cubes.contains_key(&cube.up().to_string()) {
+                neighbours.push(CubeFace::new(cube.up(), Forward))
+            } else {
+                neighbours.push(CubeFace::new(cube, Up))
+            }
+
+            if cubes.contains_key(&cube.down().forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.down().forward(), Up))
+            } else if cubes.contains_key(&cube.down().to_string()) {
+                neighbours.push(CubeFace::new(cube.down(), Forward))
+            } else {
+                neighbours.push(CubeFace::new(cube, Down))
+            }
+        },
         Back => {
-            vec![
-                CubeFace::new(facing_cube, Forward),
-                CubeFace::new(face.cube, Left),
-                CubeFace::new(facing_cube, Left),
-                CubeFace::new(face.cube.left(), Back),
-                CubeFace::new(face.cube, Right),
-                CubeFace::new(facing_cube, Right),
-                CubeFace::new(face.cube.right(), Back),
-                CubeFace::new(face.cube, Up),
-                CubeFace::new(facing_cube, Up),
-                CubeFace::new(face.cube.up(), Back),
-                CubeFace::new(face.cube, Down),
-                CubeFace::new(facing_cube, Down),
-                CubeFace::new(face.cube.down(), Back),
-            ]},
+            if cubes.contains_key(&cube.right().back().to_string()) {
+                neighbours.push(CubeFace::new(cube.right().back(), Left))
+            } else if cubes.contains_key(&cube.right().to_string()) {
+                neighbours.push(CubeFace::new(cube.right(), Back))
+            } else {
+                neighbours.push(CubeFace::new(cube, Right))
+            }
+
+            if cubes.contains_key(&cube.left().back().to_string()) {
+                neighbours.push(CubeFace::new(cube.left().back(), Right))
+            } else if cubes.contains_key(&cube.left().to_string()) {
+                neighbours.push(CubeFace::new(cube.left(), Back))
+            } else {
+                neighbours.push(CubeFace::new(cube, Left))
+            }
+
+            if cubes.contains_key(&cube.up().back().to_string()) {
+                neighbours.push(CubeFace::new(cube.up().back(), Down))
+            } else if cubes.contains_key(&cube.up().to_string()) {
+                neighbours.push(CubeFace::new(cube.up(), Back))
+            } else {
+                neighbours.push(CubeFace::new(cube, Up))
+            }
+
+            if cubes.contains_key(&cube.down().back().to_string()) {
+                neighbours.push(CubeFace::new(cube.down().back(), Up))
+            } else if cubes.contains_key(&cube.down().to_string()) {
+                neighbours.push(CubeFace::new(cube.down(), Back))
+            } else {
+                neighbours.push(CubeFace::new(cube, Down))
+            }
+        }
+        Left => {
+            if cubes.contains_key(&cube.forward().left().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward().left(), Back))
+            } else if cubes.contains_key(&cube.forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward(), Left))
+            } else {
+                neighbours.push(CubeFace::new(cube, Forward))
+            }
+
+            if cubes.contains_key(&cube.back().left().to_string()) {
+                neighbours.push(CubeFace::new(cube.back().left(), Forward))
+            } else if cubes.contains_key(&cube.back().to_string()) {
+                neighbours.push(CubeFace::new(cube.back(), Left))
+            } else {
+                neighbours.push(CubeFace::new(cube, Back))
+            }
+
+            if cubes.contains_key(&cube.up().left().to_string()) {
+                neighbours.push(CubeFace::new(cube.up().left(), Down))
+            } else if cubes.contains_key(&cube.up().to_string()) {
+                neighbours.push(CubeFace::new(cube.up(), Left))
+            } else {
+                neighbours.push(CubeFace::new(cube, Up))
+            }
+
+            if cubes.contains_key(&cube.down().left().to_string()) {
+                neighbours.push(CubeFace::new(cube.down().left(), Up))
+            } else if cubes.contains_key(&cube.down().to_string()) {
+                neighbours.push(CubeFace::new(cube.down(), Left))
+            } else {
+                neighbours.push(CubeFace::new(cube, Down))
+            }
+        }
+        Right => {
+            if cubes.contains_key(&cube.forward().right().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward().right(), Back))
+            } else if cubes.contains_key(&cube.forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward(), Right))
+            } else {
+                neighbours.push(CubeFace::new(cube, Forward))
+            }
+
+            if cubes.contains_key(&cube.back().right().to_string()) {
+                neighbours.push(CubeFace::new(cube.back().right(), Forward))
+            } else if cubes.contains_key(&cube.back().to_string()) {
+                neighbours.push(CubeFace::new(cube.back(), Right))
+            } else {
+                neighbours.push(CubeFace::new(cube, Back))
+            }
+
+            if cubes.contains_key(&cube.up().right().to_string()) {
+                neighbours.push(CubeFace::new(cube.up().right(), Down))
+            } else if cubes.contains_key(&cube.up().to_string()) {
+                neighbours.push(CubeFace::new(cube.up(), Right))
+            } else {
+                neighbours.push(CubeFace::new(cube, Up))
+            }
+
+            if cubes.contains_key(&cube.down().right().to_string()) {
+                neighbours.push(CubeFace::new(cube.down().right(), Up))
+            } else if cubes.contains_key(&cube.down().to_string()) {
+                neighbours.push(CubeFace::new(cube.down(), Right))
+            } else {
+                neighbours.push(CubeFace::new(cube, Down))
+            }
+        }
+        Up => {
+            if cubes.contains_key(&cube.forward().up().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward().up(), Back))
+            } else if cubes.contains_key(&cube.forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward(), Up))
+            } else {
+                neighbours.push(CubeFace::new(cube, Forward))
+            }
+
+            if cubes.contains_key(&cube.back().up().to_string()) {
+                neighbours.push(CubeFace::new(cube.back().up(), Forward))
+            } else if cubes.contains_key(&cube.back().to_string()) {
+                neighbours.push(CubeFace::new(cube.back(), Up))
+            } else {
+                neighbours.push(CubeFace::new(cube, Back))
+            }
+
+            if cubes.contains_key(&cube.right().up().to_string()) {
+                neighbours.push(CubeFace::new(cube.right().up(), Left))
+            } else if cubes.contains_key(&cube.right().to_string()) {
+                neighbours.push(CubeFace::new(cube.right(), Up))
+            } else {
+                neighbours.push(CubeFace::new(cube, Right))
+            }
+
+            if cubes.contains_key(&cube.left().up().to_string()) {
+                neighbours.push(CubeFace::new(cube.left().up(), Right))
+            } else if cubes.contains_key(&cube.left().to_string()) {
+                neighbours.push(CubeFace::new(cube.left(), Up))
+            } else {
+                neighbours.push(CubeFace::new(cube, Left))
+            }
+        }
+        Down => {
+            if cubes.contains_key(&cube.forward().down().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward().down(), Back))
+            } else if cubes.contains_key(&cube.forward().to_string()) {
+                neighbours.push(CubeFace::new(cube.forward(), Down))
+            } else {
+                neighbours.push(CubeFace::new(cube, Forward))
+            }
+
+            if cubes.contains_key(&cube.back().down().to_string()) {
+                neighbours.push(CubeFace::new(cube.back().down(), Forward))
+            } else if cubes.contains_key(&cube.back().to_string()) {
+                neighbours.push(CubeFace::new(cube.back(), Down))
+            } else {
+                neighbours.push(CubeFace::new(cube, Back))
+            }
+
+            if cubes.contains_key(&cube.right().down().to_string()) {
+                neighbours.push(CubeFace::new(cube.right().down(), Left))
+            } else if cubes.contains_key(&cube.right().to_string()) {
+                neighbours.push(CubeFace::new(cube.right(), Down))
+            } else {
+                neighbours.push(CubeFace::new(cube, Right))
+            }
+
+            if cubes.contains_key(&cube.left().down().to_string()) {
+                neighbours.push(CubeFace::new(cube.left().down(), Right))
+            } else if cubes.contains_key(&cube.left().to_string()) {
+                neighbours.push(CubeFace::new(cube.left(), Down))
+            } else {
+                neighbours.push(CubeFace::new(cube, Left))
+            }
+        }
     }
+    neighbours
 }

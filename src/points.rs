@@ -1,6 +1,8 @@
 use std::fmt::{Display, Formatter};
 use std::ops;
 
+use crate::points::Direction::*;
+
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Point {
     pub x: i32,
@@ -61,12 +63,12 @@ impl Point3 {
 
     pub fn go(&self, direction: Direction) -> Point3 {
         match direction {
-            Direction::Up => { self.up() }
-            Direction::Down => { self.down() }
-            Direction::Left => { self.left() }
-            Direction::Right => { self.right() }
-            Direction::Forward => { self.forward() }
-            Direction::Back => { self.back() }
+            Up => { self.up() }
+            Down => { self.down() }
+            Left => { self.left() }
+            Right => { self.right() }
+            Forward => { self.forward() }
+            Back => { self.back() }
         }
     }
 
