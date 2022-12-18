@@ -26,18 +26,27 @@ pub fn run() {
 
     let mut turn = 1;
     let mut stop_turn: i64 = 1000000000000000;
+
+    let mut draw_count = 0;
+    let mut draw_from = stop_turn;
     while turn < stop_turn {
         drop_shape(&jets, &shapes, &mut chamber, &mut highest_point, &mut next_jet, &mut next_shape);
 
-       // if turn < 10 || stop_turn < 1000000 { println!("{:?}", turn); draw_chamber(&chamber, highest_point)}
+        if draw_count > 0 || turn >= draw_from {
+            println!("{:?}", turn);
+            draw_chamber(&chamber, highest_point);
+            draw_count -= 1;
+        }
         heights.push(highest_point);
         let key = next_jet * 100 + next_shape;
         // println!("{}: jet {} shape {}, key {}", turn, next_jet, next_shape, key);
-        if visited.contains_key(&key) {
+        if visited.contains_key(&key) && cycle_start == 0 {
             cycle_start = visited[&key] as i64;
             height_per_cycle = highest_point - heights[cycle_start as usize];
             cycle_length = turn - cycle_start;
-            stop_turn = turn + 5;
+            stop_turn = 2 * turn + 10;
+            draw_from = stop_turn - 7;
+            draw_count = 7;
         }
         visited.insert(key, turn);
         turn += 1;
@@ -49,7 +58,11 @@ pub fn run() {
     for i in (cycle_start + cycle_length - 5)..turn {
         println!("{}: {:?}", i, heights[i as usize]);
     }
+
+    The problem is that the top of the pile of rocks is very different before and after the first cycle.
  */
+
+
     let mut cycles: i64 = (2022 - cycle_start) / cycle_length;
     let mut rest: i64 = (2022 - cycle_start) % cycle_length;
     println!("Part 1: {:?}", heights[(cycle_start + rest) as usize] + cycles * height_per_cycle);
