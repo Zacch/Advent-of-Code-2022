@@ -1,3 +1,4 @@
+use std::ops;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Point {
@@ -37,6 +38,12 @@ impl Point {
         i32::abs(self.x - p.x) + i32::abs(self.y - p.y)
     }
 }
+
+impl ops::Add<&Point> for Point {
+    type Output = Point;
+    fn add(self, rhs: &Point) -> Point { Point::new(self.x + rhs.x, self.y + rhs.y) }
+}
+
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub struct Rect {
