@@ -22,9 +22,11 @@ fn main() {
     day_13::run();
     day_14::run();
     day_15::run();
+
     day_17::run();
-*/
     day_18::run();
+*/
+    day_19::run();
 
     println!("Execution time: {:?}", Instant::now().checked_duration_since(now).unwrap());
 }
