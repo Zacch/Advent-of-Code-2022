@@ -5,7 +5,7 @@ use std::fs;
 
 use crate::traits::StringExtensions;
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 struct Recipe {
     id: i32,
     stop_time: i32,
@@ -91,15 +91,14 @@ pub fn run() {
         part1 += recipe.id * max_geode_production(recipe)
     }
     println!("Part 1: {}", part1);
-/*
+
     let mut part2 = 1;
-    for i in 0..2 {
+    for i in 0..3 {
         let mut new_recipe = recipes[i];
         new_recipe.stop_time = 32;
-        part2 *= max_geode_production(new_recipe);
+        part2 *= max_geode_production(&new_recipe);
     }
     println!("Part 2: {}", part2);
-*/
 }
 
 fn max_geode_production(recipe: &Recipe) -> i32 {
@@ -111,8 +110,6 @@ fn max_geode_production(recipe: &Recipe) -> i32 {
     let mut best_results_so_far = vec![0; (recipe.stop_time + 1) as usize];
     let best_end_result: State = dfs(recipe, &start, &mut memos, &mut best_results_so_far);
 
-    println!("Best end result for recipe {:?}", recipe.id);
-    println!("{:?}", best_end_result);
     best_end_result.geodes
 }
 
@@ -152,7 +149,6 @@ fn children(recipe: &Recipe, state: &State) -> Vec<State> {
     };
     let mut result: Vec<State> = vec![];
 
-    // Always build a geode cracking robot if possible
     if recipe.geode_robot_obsidian_cost <= state.obsidian && recipe.geode_robot_ore_cost <= state.ore {
         return vec![State {
             time: no_action.time,
@@ -216,6 +212,5 @@ fn children(recipe: &Recipe, state: &State) -> Vec<State> {
     }
 
     result.push(no_action);
-
     result
 }
