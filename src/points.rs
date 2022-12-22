@@ -29,9 +29,18 @@ impl Point {
     pub fn sw(&self) -> Point { Point::new(self.x - 1, self.y - 1) }
     pub fn nw(&self) -> Point { Point::new(self.x - 1, self.y + 1) }
 
+    pub fn turn_cw(&self) -> Point { Point::new(-self.y, self.x) }
+    pub fn turn_ccw(&self) -> Point { Point::new(self.y, -self.x) }
+
+
     pub fn manhattan_distance(&self, p: &Point) -> i32 {
         i32::abs(self.x - p.x) + i32::abs(self.y - p.y)
     }
+}
+
+impl ops::Add<Point> for Point {
+    type Output = Point;
+    fn add(self, rhs: Point) -> Point { Point::new(self.x + rhs.x, self.y + rhs.y) }
 }
 
 impl ops::Add<&Point> for Point {

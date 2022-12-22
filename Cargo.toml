@@ -9,8 +9,9 @@ edition = "2021"
 substring = "1.4.5"
 
 [profile.release]
+opt-level = 3
 debug = true
 
 [profile.dev]
-opt-level = 1               # Use slightly better optimizations.
-overflow-checks = false     # Disable integer overflow checks.
+opt-level = 0
+overflow-checks = true
