@@ -32,7 +32,7 @@ fn main() {
     day_23::run();
     day_24::run();
 */
-    day_24::run();
+    day_25::run();
 
     println!("Execution time: {:?}", Instant::now().checked_duration_since(now).unwrap());
 }
