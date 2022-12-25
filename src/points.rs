@@ -3,7 +3,7 @@ use std::ops;
 
 use crate::points::Direction::*;
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Ord, PartialOrd)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -37,6 +37,7 @@ impl Point {
         i32::abs(self.x - p.x) + i32::abs(self.y - p.y)
     }
 }
+
 
 impl ops::Add<Point> for Point {
     type Output = Point;

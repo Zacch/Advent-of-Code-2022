@@ -14,6 +14,12 @@ impl Rect {
     }
 }
 
+impl Rect {
+    pub fn contains_inclusive(&self, p: Point) -> bool {
+        p.x >= self.left && p.x <= self.right && p.y >= self.bottom && p.y <= self.top
+    }
+}
+
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub struct IntRange {
     pub start: i32,
