@@ -15,7 +15,7 @@ pub fn run() {
         .expect("Couldn't read the file");
 
     for line in contents.lines() {
-        let ints = line.to_int_vector();
+        let ints = line.to_usize_vector();
         let (r1, r2) = (ints[0] ..= ints[1], ints[2] ..= ints[3]);
 
         if r1.includes(&r2) || r2.includes(&r1) { part1 += 1; }

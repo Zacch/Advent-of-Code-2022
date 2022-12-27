@@ -12,11 +12,11 @@ pub fn run() {
     let mut line_points: Vec<Vec<Point>> = vec![];
 
     for line in contents.lines() {
-        let numbers = line.to_int_vector();
+        let numbers = line.to_usize_vector();
         let mut points: Vec<Point> = vec![];
         for i in (0..numbers.len()).step_by(2) {
-            points.push(Point::new(numbers[i], numbers[i + 1]));
-            all_points.push(Point::new(numbers[i], numbers[i + 1]));
+            points.push(Point::new(numbers[i] as i32, numbers[i + 1] as i32));
+            all_points.push(Point::new(numbers[i] as i32, numbers[i + 1] as i32));
         }
         line_points.push(points);
     }
